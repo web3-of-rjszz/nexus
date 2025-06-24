@@ -79,8 +79,6 @@ function run_nexus() {
         exit 1
     fi
 
-    tail -f /root/nexus.log
-
 }
 
 check_node_pm2
