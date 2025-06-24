@@ -525,7 +525,7 @@ EOF
     # 添加节点到对应的启动脚本
     for i in "${!node_ids[@]}"; do
         local node_id=${node_ids[$i]}
-        local concurrency_num=$concurrency
+        local concurrency_num=${concurrency}
         local container_name="${BASE_CONTAINER_NAME}-${node_id}"
         local log_file="${LOG_DIR}/nexus-${node_id}.log"
         
