@@ -85,7 +85,7 @@ fi
 screen -S nexus -X quit >/dev/null 2>&1 || true
 
 echo "启动 nexus-network 节点..."
-screen -dmS nexus bash -c "nexus-network start --node-id \$NODE_ID -max-threads \$CONCURRENCY &>> /root/nexus.log"
+screen -dmS nexus bash -c "nexus-network start --node-id \$NODE_ID --max-threads \$CONCURRENCY &>> /root/nexus.log"
 
 sleep 3
 
@@ -525,7 +525,7 @@ EOF
     # 添加节点到对应的启动脚本
     for i in "${!node_ids[@]}"; do
         local node_id=${node_ids[$i]}
-        local concurrency_num=${concurrency}
+        local concurrency_num=$concurrency
         local container_name="${BASE_CONTAINER_NAME}-${node_id}"
         local log_file="${LOG_DIR}/nexus-${node_id}.log"
         
@@ -547,7 +547,6 @@ EOF
             chmod 644 "$log_file"
         fi
 
-        echo "启动节点 node_id:$node_id 并发数:$concurrency_num"
         # 添加到对应组的启动脚本
         echo "echo \"[$(date '+%Y-%m-%d %H:%M:%S')] 启动节点 $node_id ...\"" >> "$script_dir/start_group${group_num}.sh"
         echo "docker run -d --name $container_name -v $log_file:/root/nexus.log -e NODE_ID=$node_id -e CONCURRENCY=$concurrency_num $IMAGE_NAME" >> "$script_dir/start_group${group_num}.sh"
