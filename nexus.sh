@@ -547,6 +547,7 @@ EOF
             chmod 644 "$log_file"
         fi
 
+        echo "启动节点 node_id:$node_id 并发数:$concurrency_num"
         # 添加到对应组的启动脚本
         echo "echo \"[$(date '+%Y-%m-%d %H:%M:%S')] 启动节点 $node_id ...\"" >> "$script_dir/start_group${group_num}.sh"
         echo "docker run -d --name $container_name -v $log_file:/root/nexus.log -e NODE_ID=$node_id -e CONCURRENCY=$concurrency_num $IMAGE_NAME" >> "$script_dir/start_group${group_num}.sh"
