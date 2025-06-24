@@ -85,7 +85,7 @@ fi
 screen -S nexus -X quit >/dev/null 2>&1 || true
 
 echo "启动 nexus-network 节点..."
-screen -dmS nexus bash -c "nexus-network start --node-id \$NODE_ID &>> /root/nexus.log"
+screen -dmS nexus bash -c "nexus-network start --node-id \$NODE_ID -max-threads \$CONCURRENCY &>> /root/nexus.log"
 
 sleep 3
 
@@ -466,6 +466,16 @@ function batch_rotate_nodes() {
         return
     fi
 
+    # 获取并发数
+    read -p "请输入并发数量:" concurrency
+    # 检查输入是否为纯数字，如果不是则赋默认值100
+    if [[ ! "$concurrency" =~ ^[0-9]+$ ]]; then
+        echo "输入无效，使用默认值 100"
+        concurrency=100
+    fi
+    echo "并发数:$concurrency"
+
+
     # 设置每两小时启动的节点数量
     read -rp "请输入每两小时要启动的节点数量（默认：${#node_ids[@]}的一半，向上取整）: " nodes_per_round
     if [ -z "$nodes_per_round" ]; then
@@ -514,6 +524,7 @@ EOF
     # 添加节点到对应的启动脚本
     for i in "${!node_ids[@]}"; do
         local node_id=${node_ids[$i]}
+        local concurrency_num=$concurrency
         local container_name="${BASE_CONTAINER_NAME}-${node_id}"
         local log_file="${LOG_DIR}/nexus-${node_id}.log"
         
@@ -537,7 +548,7 @@ EOF
 
         # 添加到对应组的启动脚本
         echo "echo \"[$(date '+%Y-%m-%d %H:%M:%S')] 启动节点 $node_id ...\"" >> "$script_dir/start_group${group_num}.sh"
-        echo "docker run -d --name $container_name -v $log_file:/root/nexus.log -e NODE_ID=$node_id $IMAGE_NAME" >> "$script_dir/start_group${group_num}.sh"
+        echo "docker run -d --name $container_name -v $log_file:/root/nexus.log -e NODE_ID=$node_id -e CONCURRENCY=$concurrency $IMAGE_NAME" >> "$script_dir/start_group${group_num}.sh"
         echo "sleep 30" >> "$script_dir/start_group${group_num}.sh"
     done
 
