@@ -66,7 +66,7 @@ function run_nexus() {
     nexus -X quit >/dev/null 2>&1 || true 
 
     echo "启动 nexus-network 节点..."
-    nohup nexus-network start --node-id $node_id --max-threads $concurrency &>> /root/nexus.log
+    nohup nexus-network start --node-id $node_id --max-threads $concurrency >> /root/nexus.log 2>&1 &
 
     sleep 3
 
