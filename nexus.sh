@@ -467,12 +467,12 @@ function batch_rotate_nodes() {
     fi
 
     # 获取并发数
-    local concurrency=100
+    local concurrency=10
     read -p "请输入并发数量:" concurrency
     # 检查输入是否为纯数字，如果不是则赋默认值100
     if [[ ! "$concurrency" =~ ^[0-9]+$ ]]; then
-        echo "输入无效，使用默认值 100"
-        concurrency=100
+        echo "输入无效，使用默认值 10"
+        concurrency=10
     fi
     echo "并发数:$concurrency"
 

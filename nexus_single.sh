@@ -49,12 +49,12 @@ function run_nexus() {
     fi
 
     # 获取并发数
-    local concurrency=100
+    local concurrency=10
     read -p "请输入并发数量:" concurrency
     # 检查输入是否为纯数字，如果不是则赋默认值100
     if [[ ! "$concurrency" =~ ^[0-9]+$ ]]; then
-        echo "输入无效，使用默认值 100"
-        concurrency=100
+        echo "输入无效，使用默认值 10"
+        concurrency=10
     fi
     echo "并发数:$concurrency"
 
@@ -66,7 +66,7 @@ function run_nexus() {
     nexus -X quit >/dev/null 2>&1 || true 
 
     echo "启动 nexus-network 节点..."
-    nohup nexus-network start --node-id $node_id --max-threads $concurrency >> /root/nexus.log 2>&1 &
+    nohup nexus-network start --node-id $node_id --max-threads $concurrency > /root/nexus.log 2>&1 &
 
 }
 
