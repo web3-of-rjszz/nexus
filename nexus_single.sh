@@ -66,18 +66,7 @@ function run_nexus() {
     nexus -X quit >/dev/null 2>&1 || true 
 
     echo "启动 nexus-network 节点..."
-    nohup nexus-network start --node-id $node_id --max-threads $concurrency &>> /root/nexus.log &
-
-    sleep 3
-
-    if screen -list | grep -q "nexus"; then
-        echo "节点已在后台启动。"
-        echo "日志文件：/root/nexus.log"
-    else
-        echo "节点启动失败，请检查日志。"
-        cat /root/nexus.log
-        exit 1
-    fi
+    nohup nexus-network start --node-id $node_id --max-threads $concurrency >> /root/nexus.log 2&1 &
 
 }
 
