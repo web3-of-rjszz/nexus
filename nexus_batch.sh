@@ -12,6 +12,8 @@ node_ids=("14567866" "14596194")
 sshpass -p "$PASSWORD" ssh -tt "$USERNAME@$SERVER_IP" "bash -s" << REMOTE_CMD
     {   # 关闭命令回显
         set +x  
+        # 下载或者更新nexus客户端
+        curl https://cli.nexus.xyz/ | NONINTERACTIVE=1 sh && source ~/.bashrc
         # 清除所有 tmux终端
         tmux kill-server 2>/dev/null 
         echo "已清除所有tmux终端"
